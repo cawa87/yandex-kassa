@@ -1,0 +1,23 @@
+{
+  "name": "cawakharkov/yandex-kassa",
+  "description": "Laravel package that provides integration with Yandex.Kassa via Http protocol",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Aleksandr Zamiatin",
+      "email": "cawa123@mail.ru"
+    }
+  ],
+  "require": {
+    "php": ">=5.6.0",
+    "laravel/framework": "5.1.*",
+    "illuminate/support": "5.1.*",
+    "cawakharkov/laravel-balance": "5.1.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Cawakharkov\\YandexKassa\\": "src/YandexKassa"
+    }
+  },
+  "minimum-stability": "dev"
+}

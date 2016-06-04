@@ -16,7 +16,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Cawakharkov\\YandexKassa\\": "src/YandexKassa"
+      "CawaKharkov\\YandexKassa\\": "src/YandexKassa"
     }
   },
   "minimum-stability": "dev"

@@ -27,10 +27,7 @@ class PaymentRequest extends Request
     public function rules()
     {
         return [
-            'name' => 'required|max:255',
-            'category_id' => 'required',
-            'type_id' => 'required',
-            'attribute_type_id' => 'required',
+          
         ];
     }
 

@@ -21,7 +21,7 @@ class CreateYandexPayment extends Migration
             $table->float('orderSumAmount');
             $table->float('shopSumAmount');
             
-            $table->tinyInteger('type');
+            $table->strin('action',20);
             
             $table->integer('invoiceId');
             $table->integer('yandexPaymentId');

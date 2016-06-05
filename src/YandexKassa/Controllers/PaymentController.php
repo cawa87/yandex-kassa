@@ -33,27 +33,6 @@ class PaymentController extends Controller
 
     public function check(PaymentRequest $request)
     {
-        Config::set('laravel-debugbar::config.enabled', false);
-
-        /**
-         * app.requests {"request":{"orderNumber":"abc1111111",
-         * "orderSumAmount":"345.00","cdd_exp_date":"1222",
-         * "shopArticleId":"240809","paymentPayerCode":"4100322062290",
-         * "cdd_rrn":"","external_id":"deposit","type":"AC","paymentType":"AC",
-         * "requestDatetime":"2016-06-05T14:21:33.393+03:00",
-         * "depositNumber":"QyGUYW1MTLterOVkVg5rNbXGIiIZ.001f.201606",
-         * "cps_user_country_code":"PL","orderCreatedDatetime":"2016-06-05T14:21:33.294+03:00",
-         * "sk":"u71590a8bd78f21ade045c8f4107452c3","action":"checkOrder","shopId":"116273",
-         * "scid":"535929","shopSumBankPaycash":"1003","shopSumCurrencyPaycash":"10643",
-         * "rebillingOn":"false","orderSumBankPaycash":"1003","cps_region_id":"11475",
-         * "orderSumCurrencyPaycash":"10643","merchant_order_id":"abc1111111_050616142059_00000_116273",
-         * "cdd_pan_mask":"444444|4448","customerNumber":"116273","yandexPaymentId":"2570045470018",
-         * "invoiceId":"2000000774818","shopSumAmount":"332.92",
-         * "md5":"4383906914F0DC177CBD1F2198642D7D","/payment/check":""}}
-         */
-
-        Log::info('app.requests', ['request' => $request->all()]);
-
 
         $transactionId = $request->get('invoiceId');
         $action = $request->get('action');
@@ -98,8 +77,9 @@ class PaymentController extends Controller
             'action' => $request->get('action'),
             'orderSumAmount' => $orderSumAmount,
             'shopSumAmount' =>$shopSumAmount,
-            'orderSumCurrencyPaycash' => $orderSumCurrencyPaycash,
             'user_id' => $userId,
+            'type' => $request->get('action'),
+
         ];
 
         $md5 = $request->get('md5');
@@ -113,10 +93,6 @@ class PaymentController extends Controller
         ]);
         
         $payment =  $paymentRepo->create($data);
-
-        Log::info('yandex.transaction', ['model' => $transaction->toArray()]);
-        Log::info('yandex.payment', ['model' => $payment->toArray()]);
-
 
         $hash = md5($data['action'] . ';' . $orderSumAmount . ';' . $orderSumCurrencyPaycash . ';'
             . $orderSumBankPaycash . ';'

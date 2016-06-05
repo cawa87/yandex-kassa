@@ -16,7 +16,7 @@ class YandexPayment extends Model implements YandexPaymentInterface
      *
      * @var string
      */
-    protected $table = 'yandex_payment';
+    protected $table = 'yandex_payments';
 
     /**
      * The attributes that are mass assignable.
@@ -27,6 +27,7 @@ class YandexPayment extends Model implements YandexPaymentInterface
         'hash' ,
        // 'transactionId',
       //  'action',
+        'type',
         'orderSumAmount' ,
         'shopSumAmount' ,
         'user_id'

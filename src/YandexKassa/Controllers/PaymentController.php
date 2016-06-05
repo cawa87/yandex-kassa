@@ -63,24 +63,14 @@ class PaymentController extends Controller
 
     public function aviso(PaymentRequest $request, YandexPaymentRepositoryInterface $paymentRepo)
     {
-        Log::info('app.requests', ['request' => $request->all()]);
-
+     
         $userId = $request->get('customerNumber');
         $orderSumAmount = $request->get('orderSumAmount');
         $shopSumAmount = $request->get('shopSumAmount');
         $orderSumCurrencyPaycash = $request->get('orderSumCurrencyPaycash');
         $orderSumBankPaycash = $request->get('orderSumBankPaycash');
 
-        $data = [
-            'hash' => uniqid('yandex_payment_',true),
-            'transactionId' => $request->get('invoiceId'),
-            'action' => $request->get('action'),
-            'orderSumAmount' => $orderSumAmount,
-            'shopSumAmount' =>$shopSumAmount,
-            'user_id' => $userId,
-            'type' => $request->get('action'),
 
-        ];
 
         $md5 = $request->get('md5');
         $requestDatetime = $request->get('requestDatetime');
@@ -91,6 +81,18 @@ class PaymentController extends Controller
             'type' => BalanceTransaction::CONST_TYPE_REFILL,
             'user_id' => $userId
         ]);
+
+        $data = [
+            'hash' => uniqid('yandex_payment_',true),
+            'transactionId' => $request->get('invoiceId'),
+            'action' => $request->get('action'),
+            'orderSumAmount' => $orderSumAmount,
+            'shopSumAmount' =>$shopSumAmount,
+            'user_id' => $userId,
+            'type' => $request->get('action'),
+            'transaction_id' => $transaction->id
+
+        ];
         
         $payment =  $paymentRepo->create($data);
 

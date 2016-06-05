@@ -30,7 +30,8 @@ class YandexPayment extends Model implements YandexPaymentInterface
         'type',
         'orderSumAmount' ,
         'shopSumAmount' ,
-        'user_id'
+        'user_id',
+        'transaction_id'
     ];
 
     /**

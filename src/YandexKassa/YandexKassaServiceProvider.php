@@ -2,6 +2,8 @@
 
 namespace CawaKharkov\YandexKassa;
 
+use CawaKharkov\YandexKassa\Interfaces\YandexPaymentRepositoryInterface;
+use CawaKharkov\YandexKassa\Repositories\YandexPaymentRepository;
 use CawaKharkov\YandexKassa\ViewComposers\SettingsComposer;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
@@ -43,7 +45,7 @@ class YandexKassaServiceProvider extends ServiceProvider
     public function register()
     {
         //   $this->app->bind(TransactionRepositoryInterface::class, BalanceTransactionRepository::class);
-        //  $this->app->bind(BalanceTransactionInterface::class, BalanceTransaction::class);
+         $this->app->bind(YandexPaymentRepositoryInterface::class, YandexPaymentRepository::class);
     }
 
     /**

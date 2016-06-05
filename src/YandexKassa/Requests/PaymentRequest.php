@@ -2,11 +2,13 @@
 
 namespace CawaKharkov\YandexKassa\Requests;
 
+use Illuminate\Foundation\Http\FormRequest;
+
 /**
  * Class PaymentRequest
  * @package CawaKharkov\YandexKassa\Requests
  */
-class PaymentRequest extends Request
+class PaymentRequest extends FormRequest
 {
 
     /**

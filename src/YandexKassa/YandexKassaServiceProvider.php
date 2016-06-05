@@ -2,7 +2,9 @@
 
 namespace CawaKharkov\YandexKassa;
 
+use CawaKharkov\YandexKassa\ViewComposers\SettingsComposer;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
 
 
 /**
@@ -28,6 +30,8 @@ class YandexKassaServiceProvider extends ServiceProvider
         ], 'migrations');
 
         include __DIR__ . '/../routes.php';
+
+        View::composer(config('yandex_kassa.form_view'), SettingsComposer::class);
 
     }
 

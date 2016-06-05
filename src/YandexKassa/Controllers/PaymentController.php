@@ -28,7 +28,7 @@ class PaymentController extends Controller
 
     public function form()
     {
-        return view(config('yandex_kassa.form_view'));
+            return view(config('yandex_kassa.form_view'));
     }
 
     public function check(PaymentRequest $request)
@@ -113,6 +113,9 @@ class PaymentController extends Controller
         ]);
         
         $payment =  $paymentRepo->create($data);
+
+        Log::info('yandex.transaction', ['model' => $transaction->toArray()]);
+        Log::info('yandex.payment', ['model' => $payment->toArray()]);
 
 
         $hash = md5($data['action'] . ';' . $orderSumAmount . ';' . $orderSumCurrencyPaycash . ';'

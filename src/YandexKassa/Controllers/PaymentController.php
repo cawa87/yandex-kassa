@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Log;
 class PaymentController extends Controller
 {
 
-
     /**
      * PaymentController constructor.
      */
@@ -28,7 +27,7 @@ class PaymentController extends Controller
 
     public function form()
     {
-            return view(config('yandex_kassa.form_view'));
+      return view(config('yandex_kassa.form_view'));
     }
 
     public function check(PaymentRequest $request)

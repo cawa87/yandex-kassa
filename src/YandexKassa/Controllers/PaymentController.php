@@ -71,13 +71,10 @@ class PaymentController extends Controller
     /**
      * Receive Http payment request from Yandex
      * @param PaymentRequest $request
-     * @param TransactionRepositoryInterface $transactionRepo
      * @param YandexPaymentRepositoryInterface $paymentRepo
      * @return mixed
      */
-    public function aviso(PaymentRequest $request,
-                          TransactionRepositoryInterface $transactionRepo,
-                          YandexPaymentRepositoryInterface $paymentRepo)
+    public function aviso(PaymentRequest $request,YandexPaymentRepositoryInterface $paymentRepo)
     {
      
         $userId = $request->get('customerNumber');
@@ -100,7 +97,14 @@ class PaymentController extends Controller
         $code = $this->checkCode($data, $md5);
 
         if ($code === 0) {
-            $transaction = $transactionRepo->create($data);
+
+            $transaction = BalanceTransaction::create([
+                'value' => $data['orderSumAmount'],
+                'hash' => uniqid('transaction_', true),
+                'type' => BalanceTransaction::CONST_TYPE_REFILL,
+                'user_id' => $data['user_id']
+            ]);
+
             $data['transaction_id'] = $transaction->id;
 
             $payment = $paymentRepo->create($data);

@@ -50,7 +50,7 @@ class PaymentController extends Controller
 
         $data = [
             'hash' => uniqid('yandex_payment_',true),
-            'transactionId' => $request->get('invoiceId'),
+            'invoiceId' => $request->get('invoiceId'),
             'action' => $request->get('action'),
             'orderSumAmount' => $request->get('orderSumAmount'),
             'shopSumAmount' => $request->get('shopSumAmount'),

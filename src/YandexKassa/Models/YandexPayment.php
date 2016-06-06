@@ -2,6 +2,7 @@
 
 namespace CawaKharkov\YandexKassa\Models;
 
+use CawaKharkov\LaravelBalance\Models\BalanceTransaction;
 use CawaKharkov\YandexKassa\Interfaces\YandexPaymentInterface;
 use Illuminate\Database\Eloquent\Model;
 
@@ -84,7 +85,7 @@ class YandexPayment extends Model implements YandexPaymentInterface
 
     public function transaction()
     {
-        return $this->belongsTo('transaction_id');
+        return $this->belongsTo(BalanceTransaction::class);
     }
 
 

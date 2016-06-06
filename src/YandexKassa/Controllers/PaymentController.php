@@ -116,10 +116,10 @@ class PaymentController extends Controller
 
             if($payment){
 
-                DB::transaction(function() use ($payment) {
+                \DB::transaction(function() use ($payment) {
 
-                    $payment->transaction->accepted = 1;
-                    $payment->transaction->save();
+                    $payment->transaction()->accepted = 1;
+                    $payment->transaction()->save();
 
                     $payment->accepted = 1;
                     $payment->save();

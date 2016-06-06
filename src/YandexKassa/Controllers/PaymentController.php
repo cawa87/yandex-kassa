@@ -5,7 +5,7 @@ namespace CawaKharkov\YandexKassa\Controllers;
 
 use App\Http\Controllers\Controller;
 use CawaKharkov\YandexKassa\Interfaces\YandexPaymentRepositoryInterface;
-use CawaKharkov\LaravelBalance\Interfaces\BalanceTransactionInterface;
+use CawaKharkov\LaravelBalance\Interfaces\TransactionRepositoryInterface;
 use CawaKharkov\YandexKassa\Requests\PaymentRequest;
 use CawaKharkov\YandexKassa\Validators\PaymentValidator;
 use Illuminate\Support\Facades\Config;
@@ -76,7 +76,7 @@ class PaymentController extends Controller
      * @return mixed
      */
     public function aviso(PaymentRequest $request,
-                          BalanceTransactionInterface $transactionRepo,
+                          TransactionRepositoryInterface $transactionRepo,
                           YandexPaymentRepositoryInterface $paymentRepo)
     {
      

@@ -57,7 +57,6 @@ class PaymentController extends Controller
             'orderSumCurrencyPaycash' => $request->get('orderSumCurrencyPaycash'),
             'orderSumBankPaycash' => $request->get('orderSumBankPaycash'),
             'user_id' => $userId,
-            'type' => $request->get('action'),
 
         ];
 
@@ -106,7 +105,6 @@ class PaymentController extends Controller
             'orderSumCurrencyPaycash' => $request->get('orderSumCurrencyPaycash'),
             'orderSumBankPaycash' => $request->get('orderSumBankPaycash'),
             'user_id' => $userId,
-            'type' => BalanceTransaction::CONST_TYPE_REFILL,
 
         ];
 

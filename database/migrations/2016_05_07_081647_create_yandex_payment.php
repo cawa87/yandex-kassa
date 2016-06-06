@@ -30,7 +30,7 @@ class CreateYandexPayment extends Migration
             $table->foreign('user_id')->references('id')->on('users');
 
             $table->integer('transaction_id')->unsigned();
-            $table->foreign('transaction_id')->references('id')->on('transaction');
+            $table->foreign('transaction_id')->references('id')->on('transactions');
             $table->timestamps();
 
         });

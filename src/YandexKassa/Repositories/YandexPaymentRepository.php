@@ -31,7 +31,7 @@ class YandexPaymentRepository implements YandexPaymentRepositoryInterface
      */
     public function create(array $data)
     {
-        return YandexPayment::create($data);
+        return $this->model->create($data);
     }
 
     /**
@@ -40,6 +40,6 @@ class YandexPaymentRepository implements YandexPaymentRepositoryInterface
      */
     public function findByInvoiceId($id)
     {
-        return YandexPayment::where(['invoiceId' => $id])->first();
+        return $this->model->where(['invoiceId' => $id])->first();
     }
 }

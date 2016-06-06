@@ -5,7 +5,7 @@ namespace CawaKharkov\YandexKassa\Controllers;
 
 use App\Http\Controllers\Controller;
 use CawaKharkov\YandexKassa\Interfaces\YandexPaymentRepositoryInterface;
-use CawaKharkov\LaravelBalance\Interfaces\TransactionRepositoryInterface;
+use CawaKharkov\LaravelBalance\Models\BalanceTransaction;
 use CawaKharkov\YandexKassa\Requests\PaymentRequest;
 use CawaKharkov\YandexKassa\Validators\PaymentValidator;
 use Illuminate\Support\Facades\Config;

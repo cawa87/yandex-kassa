@@ -63,7 +63,7 @@ class PaymentController extends Controller
 
         $code = $this->checkCode($data, $md5);
 
-        $xml = $this->generateXml($code, $data['transactionId'], $requestDatetime);
+        $xml = $this->generateXml($code, $data['invoiceId'], $requestDatetime);
 
         return Response::make($xml->asXML())->header('content', 'application/xml');
     }
@@ -111,7 +111,7 @@ class PaymentController extends Controller
 
         }
 
-        $xml = $this->generateXml($code, $data['transactionId'], $requestDatetime);
+        $xml = $this->generateXml($code, $data['invoiceId'], $requestDatetime);
 
         return Response::make($xml->asXML())->header('content', 'application/xml');
     }

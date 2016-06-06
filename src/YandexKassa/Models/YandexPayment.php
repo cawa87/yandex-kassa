@@ -25,8 +25,8 @@ class YandexPayment extends Model implements YandexPaymentInterface
      */
     protected $fillable = [
         'hash' ,
-       // 'transactionId',
-      //  'action',
+        'invoiceId',
+        'action',
         'type',
         'orderSumAmount' ,
         'shopSumAmount' ,

@@ -24,7 +24,6 @@ class CreateYandexPayment extends Migration
             $table->strin('action',20);
             
             $table->integer('invoiceId');
-            $table->integer('yandexPaymentId');
 
             $table->integer('user_id')->unsigned(); //customerNumber
             $table->foreign('user_id')->references('id')->on('users');

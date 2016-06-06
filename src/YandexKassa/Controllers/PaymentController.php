@@ -9,6 +9,8 @@ use CawaKharkov\YandexKassa\Requests\PaymentRequest;
 use CawaKharkov\YandexKassa\Validators\PaymentValidator;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Response;
+
 
 /**
  * Class PaymentController
@@ -52,7 +54,7 @@ class PaymentController extends Controller
             'orderSumAmount' => $request->get('orderSumAmount'),
             'shopSumAmount' => $request->get('shopSumAmount'),
             'orderSumCurrencyPaycash' => $request->get('orderSumCurrencyPaycash'),
-            'orderSumCurrencyPaycash' => $request->get('orderSumBankPaycash'),
+            'orderSumBankPaycash' => $request->get('orderSumBankPaycash'),
             'user_id' => $userId,
             'type' => $request->get('action'),
 
@@ -88,7 +90,7 @@ class PaymentController extends Controller
             'orderSumAmount' => $request->get('orderSumAmount'),
             'shopSumAmount' => $request->get('shopSumAmount'),
             'orderSumCurrencyPaycash' => $request->get('orderSumCurrencyPaycash'),
-            'orderSumCurrencyPaycash' => $request->get('orderSumBankPaycash'),
+            'orderSumBankPaycash' => $request->get('orderSumBankPaycash'),
             'user_id' => $userId,
             'type' => $request->get('action'),
 
@@ -119,11 +121,12 @@ class PaymentController extends Controller
     {
         $xml = new \SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><checkOrderResponse/>');
 
-        // $element = $xml->addChild('checkOrderResponse');
         $xml->addAttribute('code', $code);
         $xml->addAttribute('invoiceId', $transactionId);
         $xml->addAttribute('shopId', config('yandex_kassa.shop.shopId'));
         $xml->addAttribute('performedDatetime', $requestDatetime);
+
+        return $xml;
     }
 
     /**
@@ -144,15 +147,14 @@ class PaymentController extends Controller
     {
         $code = 1;
 
-        $hash = md5($data['action'], ';', $data['orderSumAmount'], ';'
-            , $data['orderSumCurrencyPaycash'] . ';', $data['orderSumBankPaycash'] . ';'
-            , config('yandex_kassa.shop.shopId'), ';', $data['transactionId']
-            , ';', $data['userId'], ';', config('yandex_kassa.shop.password'));
+        $hash = md5($data['action']. ';'. $data['orderSumAmount']. ';'
+            . $data['orderSumCurrencyPaycash'] . ';'. $data['orderSumBankPaycash'] . ';'
+            . config('yandex_kassa.shop.shopId'). ';'. $data['transactionId']
+            . ';'. $data['user_id']. ';'. config('yandex_kassa.shop.password'));
 
         if (strtolower($hash) == strtolower($md5)) {
             $code = 0;
         }
-
         return $code;
     }
 }

@@ -4,7 +4,6 @@ namespace CawaKharkov\YandexKassa\Controllers;
 
 
 use App\Http\Controllers\Controller;
-use CawaKharkov\LaravelBalance\Models\BalanceTransaction;
 use CawaKharkov\YandexKassa\Interfaces\YandexPaymentRepositoryInterface;
 use CawaKharkov\YandexKassa\Requests\PaymentRequest;
 use CawaKharkov\YandexKassa\Validators\PaymentValidator;
@@ -25,89 +24,129 @@ class PaymentController extends Controller
     {
     }
 
+    /**
+     * Display payment from
+     * @return mixed
+     */
     public function form()
     {
       return view(config('yandex_kassa.form_view'));
     }
 
+    /**
+      Receive Http check payment request from Yandex
+     * @param PaymentRequest $request
+     * @return mixed
+     */
     public function check(PaymentRequest $request)
     {
 
-        $transactionId = $request->get('invoiceId');
-        $action = $request->get('action');
-        $value = $request->get('orderSumAmount');
-        $orderSumCurrencyPaycash = $request->get('orderSumCurrencyPaycash');
-        $orderSumBankPaycash = $request->get('orderSumBankPaycash');
-        $customerNumber = $request->get('customerNumber');
-        $md5 = $request->get('md5');
-        $requestDatetime = $request->get('requestDatetime');
-
-        $hash = md5($action . ';' . $value .
-            ';' . $orderSumCurrencyPaycash . ';' .
-            $orderSumBankPaycash . ';' .
-            '116273' . ';' . $transactionId . ';'
-            . $_POST['customerNumber'] . ';' . 'eKa5vVhcoLGf');
-        if (strtolower($hash) != strtolower($md5)) {
-            $code = 1;
-        } else {
-            $code = 0;
-        }
-
-        print '<?xml version="1.0" encoding="UTF-8"?>';
-        print '<checkOrderResponse performedDatetime="' .
-            $requestDatetime . '" code="' . $code . '"' .
-            ' invoiceId="' . $transactionId .
-            '" shopId="' . config('yandex_kassa.shop.shopId'). '"/>';
-    }
-
-    public function aviso(PaymentRequest $request, YandexPaymentRepositoryInterface $paymentRepo)
-    {
-     
         $userId = $request->get('customerNumber');
-        $orderSumAmount = $request->get('orderSumAmount');
-        $shopSumAmount = $request->get('shopSumAmount');
-        $orderSumCurrencyPaycash = $request->get('orderSumCurrencyPaycash');
-        $orderSumBankPaycash = $request->get('orderSumBankPaycash');
-
-
-
         $md5 = $request->get('md5');
         $requestDatetime = $request->get('requestDatetime');
-
-        $transaction = BalanceTransaction::create([
-            'value' => $shopSumAmount,
-             'hash' => uniqid('transaction_',true),
-            'type' => BalanceTransaction::CONST_TYPE_REFILL,
-            'user_id' => $userId
-        ]);
 
         $data = [
             'hash' => uniqid('yandex_payment_',true),
             'transactionId' => $request->get('invoiceId'),
             'action' => $request->get('action'),
-            'orderSumAmount' => $orderSumAmount,
-            'shopSumAmount' =>$shopSumAmount,
+            'orderSumAmount' => $request->get('orderSumAmount'),
+            'shopSumAmount' => $request->get('shopSumAmount'),
+            'orderSumCurrencyPaycash' => $request->get('orderSumCurrencyPaycash'),
+            'orderSumCurrencyPaycash' => $request->get('orderSumBankPaycash'),
             'user_id' => $userId,
             'type' => $request->get('action'),
-            'transaction_id' => $transaction->id
 
         ];
-        
-        $payment =  $paymentRepo->create($data);
 
-        $hash = md5($data['action'] . ';' . $orderSumAmount . ';' . $orderSumCurrencyPaycash . ';'
-            . $orderSumBankPaycash . ';'
-            . config('yandex_kassa.shop.shopId') . ';' . $data['transactionId']
-            . ';' . $userId . ';' . config('yandex_kassa.shop.password'));
-        if (strtolower($hash) != strtolower($md5)) {
-            $code = 1;
-        } else {
+        $code = $this->checkCode($data, $md5);
+
+        $xml = $this->generateXml($code, $data['transactionId'], $requestDatetime);
+
+        return Response::make($xml->asXML())->header('content', 'application/xml');
+    }
+
+    /**
+     * Receive Http payment request from Yandex
+     * @param PaymentRequest $request
+     * @param TransactionRepositoryInterface $transactionRepo
+     * @param YandexPaymentRepositoryInterface $paymentRepo
+     * @return mixed
+     */
+    public function aviso(PaymentRequest $request,
+                          TransactionRepositoryInterface $transactionRepo,
+                          YandexPaymentRepositoryInterface $paymentRepo)
+    {
+     
+        $userId = $request->get('customerNumber');
+        $md5 = $request->get('md5');
+        $requestDatetime = $request->get('requestDatetime');
+
+        $data = [
+            'hash' => uniqid('yandex_payment_',true),
+            'transactionId' => $request->get('invoiceId'),
+            'action' => $request->get('action'),
+            'orderSumAmount' => $request->get('orderSumAmount'),
+            'shopSumAmount' => $request->get('shopSumAmount'),
+            'orderSumCurrencyPaycash' => $request->get('orderSumCurrencyPaycash'),
+            'orderSumCurrencyPaycash' => $request->get('orderSumBankPaycash'),
+            'user_id' => $userId,
+            'type' => $request->get('action'),
+
+        ];
+
+        $code = $this->checkCode($data, $md5);
+
+        if ($code === 0) {
+            $transaction = $transactionRepo->create($data);
+
+            $data['transaction_id'] = $transaction->id;
+
+            $payment = $paymentRepo->create($data);
+
+        }
+
+        $xml = $this->generateXml($code, $data['transactionId'], $requestDatetime);
+
+
+        return Response::make($xml->asXML())->header('content', 'application/xml');
+    }
+
+    /**
+     * Generate XML
+     * @param $code
+     * @param $transactionId
+     * @param $requestDatetime
+     */
+    protected function generateXml($code, $transactionId, $requestDatetime)
+    {
+        $xml = new \SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><checkOrderResponse/>');
+
+        // $element = $xml->addChild('checkOrderResponse');
+        $xml->addAttribute('code', $code);
+        $xml->addAttribute('invoiceId', $transactionId);
+        $xml->addAttribute('shopId', config('yandex_kassa.shop.shopId'));
+        $xml->addAttribute('performedDatetime', $requestDatetime);
+    }
+
+    /**
+     * Check md5 of the payment
+     * @param array $data
+     * @param $md5
+     * @return int
+     */
+    private function checkCode(array $data, $md5)
+    {
+        $code = 1;
+
+        $hash = md5($data['action'], ';', $data['orderSumAmount'], ';'
+            , $data['orderSumCurrencyPaycash'] . ';', $data['orderSumBankPaycash'] . ';'
+            , config('yandex_kassa.shop.shopId'), ';', $data['transactionId']
+            , ';', $data['userId'], ';', config('yandex_kassa.shop.password'));
+
+        if (strtolower($hash) == strtolower($md5)) {
             $code = 0;
         }
-        print '<?xml version="1.0" encoding="UTF-8"?>';
-        print '<checkOrderResponse performedDatetime="' .
-            $requestDatetime . '" code="' . $code . '"' .
-            ' invoiceId="' . $data['transactionId'] .
-            '" shopId="' . config('yandex_kassa.shop.shopId'). '"/>';
+
+        return $code;
     }
 }

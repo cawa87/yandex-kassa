@@ -22,6 +22,7 @@ class CreateYandexPayment extends Migration
             $table->float('shopSumAmount');
             
             $table->strin('action',20);
+            $table->boolean('accepted')->default(0);
             
             $table->integer('invoiceId');
 

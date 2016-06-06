@@ -33,4 +33,13 @@ class YandexPaymentRepository implements YandexPaymentRepositoryInterface
     {
         return YandexPayment::create($data);
     }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function findByInvoiceId($id)
+    {
+        return YandexPayment::where(['invoiceId' => $id])->first();
+    }
 }

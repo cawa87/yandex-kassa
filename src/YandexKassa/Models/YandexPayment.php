@@ -82,5 +82,10 @@ class YandexPayment extends Model implements YandexPaymentInterface
         return $this->belongsTo(config('laravel_balance.user'));
     }
 
+    public function transaction()
+    {
+        return $this->belongsTo('transaction_id');
+    }
+
 
 }

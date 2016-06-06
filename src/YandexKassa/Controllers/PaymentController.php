@@ -41,42 +41,9 @@ class PaymentController extends Controller
      * @param PaymentRequest $request
      * @return mixed
      */
-    public function check(PaymentRequest $request)
+    public function check(PaymentRequest $request, YandexPaymentRepositoryInterface $paymentRepo)
     {
 
-        $userId = $request->get('customerNumber');
-        $md5 = $request->get('md5');
-        $requestDatetime = $request->get('requestDatetime');
-
-        $data = [
-            'hash' => uniqid('yandex_payment_',true),
-            'invoiceId' => $request->get('invoiceId'),
-            'action' => $request->get('action'),
-            'orderSumAmount' => $request->get('orderSumAmount'),
-            'shopSumAmount' => $request->get('shopSumAmount'),
-            'orderSumCurrencyPaycash' => $request->get('orderSumCurrencyPaycash'),
-            'orderSumBankPaycash' => $request->get('orderSumBankPaycash'),
-            'user_id' => $userId,
-            'type' => $request->get('action'),
-
-        ];
-
-        $code = $this->checkCode($data, $md5);
-
-        $xml = $this->generateXml($code, $data['invoiceId'], $requestDatetime);
-
-        return Response::make($xml->asXML())->header('content', 'application/xml');
-    }
-
-    /**
-     * Receive Http payment request from Yandex
-     * @param PaymentRequest $request
-     * @param YandexPaymentRepositoryInterface $paymentRepo
-     * @return mixed
-     */
-    public function aviso(PaymentRequest $request,YandexPaymentRepositoryInterface $paymentRepo)
-    {
-     
         $userId = $request->get('customerNumber');
         $md5 = $request->get('md5');
         $requestDatetime = $request->get('requestDatetime');
@@ -108,6 +75,60 @@ class PaymentController extends Controller
             $data['transaction_id'] = $transaction->id;
 
             $payment = $paymentRepo->create($data);
+
+        }
+        
+
+        $xml = $this->generateXml($code, $data['invoiceId'], $requestDatetime);
+
+        return Response::make($xml->asXML())->header('content', 'application/xml');
+    }
+
+    /**
+     * Receive Http payment request from Yandex
+     * @param PaymentRequest $request
+     * @param YandexPaymentRepositoryInterface $paymentRepo
+     * @return mixed
+     */
+    public function aviso(PaymentRequest $request,YandexPaymentRepositoryInterface $paymentRepo)
+    {
+     
+        $userId = $request->get('customerNumber');
+        $md5 = $request->get('md5');
+        $requestDatetime = $request->get('requestDatetime');
+
+        $data = [
+            'hash' => uniqid('yandex_payment_',true),
+            'invoiceId' => $request->get('invoiceId'),
+            'action' => $request->get('action'),
+            'orderSumAmount' => $request->get('orderSumAmount'),
+            'shopSumAmount' => $request->get('shopSumAmount'),
+            'orderSumCurrencyPaycash' => $request->get('orderSumCurrencyPaycash'),
+            'orderSumBankPaycash' => $request->get('orderSumBankPaycash'),
+            'user_id' => $userId,
+            'type' => BalanceTransaction::CONST_TYPE_REFILL,
+
+        ];
+
+        $code = $this->checkCode($data, $md5);
+
+        if ($code === 0) {
+
+            $payment = $paymentRepo->findByInvoiceId($data['invoiceId']);
+
+            if($payment){
+
+                DB::transaction(function() use ($payment) {
+
+                    $payment->transaction->accepted = 1;
+                    $payment->transaction->save();
+
+                    $payment->accepted = 1;
+                    $payment->save();
+
+                });
+
+            }
 
         }
 

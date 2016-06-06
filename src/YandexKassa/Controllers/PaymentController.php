@@ -98,7 +98,6 @@ class PaymentController extends Controller
 
         if ($code === 0) {
             $transaction = $transactionRepo->create($data);
-
             $data['transaction_id'] = $transaction->id;
 
             $payment = $paymentRepo->create($data);
@@ -106,7 +105,6 @@ class PaymentController extends Controller
         }
 
         $xml = $this->generateXml($code, $data['transactionId'], $requestDatetime);
-
 
         return Response::make($xml->asXML())->header('content', 'application/xml');
     }
@@ -126,6 +124,14 @@ class PaymentController extends Controller
         $xml->addAttribute('invoiceId', $transactionId);
         $xml->addAttribute('shopId', config('yandex_kassa.shop.shopId'));
         $xml->addAttribute('performedDatetime', $requestDatetime);
+    }
+
+    /**
+     * @param PaymentRequest $request
+     */
+    protected function collectData(PaymentRequest $request)
+    {
+     //@todo move all params to FormRequest
     }
 
     /**

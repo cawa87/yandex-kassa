@@ -154,7 +154,7 @@ class PaymentController extends Controller
 
         $hash = md5($data['action']. ';'. $data['orderSumAmount']. ';'
             . $data['orderSumCurrencyPaycash'] . ';'. $data['orderSumBankPaycash'] . ';'
-            . config('yandex_kassa.shop.shopId'). ';'. $data['transactionId']
+            . config('yandex_kassa.shop.shopId'). ';'. $data['invoiceId']
             . ';'. $data['user_id']. ';'. config('yandex_kassa.shop.password'));
 
         if (strtolower($hash) == strtolower($md5)) {

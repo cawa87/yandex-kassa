@@ -26,7 +26,7 @@ class PaymentPageController extends Controller
      */
     public function success()
     {
-        return view('yandex_kass::payment_page.success');
+        return view('yandex_kassa::payment_page.success');
     }
 
     /**
@@ -35,6 +35,6 @@ class PaymentPageController extends Controller
      */
     public function fail()
     {
-        return view('yandex_kass::payment_page');
+        return view('yandex_kassa::payment_page');
     }
 }

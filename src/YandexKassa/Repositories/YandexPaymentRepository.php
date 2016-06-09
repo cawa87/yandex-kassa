@@ -3,15 +3,16 @@
 namespace CawaKharkov\YandexKassa\Repositories;
 
 
-use CawaKharkov\LaravelBalance\Interfaces\BalanceTransactionInterface;
-use CawaKharkov\LaravelBalance\Interfaces\TransactionRepositoryInterface;
 use CawaKharkov\YandexKassa\Interfaces\YandexPaymentInterface;
 use CawaKharkov\YandexKassa\Interfaces\YandexPaymentRepositoryInterface;
-use CawaKharkov\YandexKassa\Models\YandexPayment;
 use Illuminate\Support\Facades\Auth;
 use YandexKassa\Events\PaymentCreated;
 use Event;
 
+/**
+ * Class YandexPaymentRepository
+ * @package CawaKharkov\YandexKassa\Repositories
+ */
 class YandexPaymentRepository implements YandexPaymentRepositoryInterface
 {
 

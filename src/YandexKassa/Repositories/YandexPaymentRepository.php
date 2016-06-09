@@ -9,6 +9,8 @@ use CawaKharkov\YandexKassa\Interfaces\YandexPaymentInterface;
 use CawaKharkov\YandexKassa\Interfaces\YandexPaymentRepositoryInterface;
 use CawaKharkov\YandexKassa\Models\YandexPayment;
 use Illuminate\Support\Facades\Auth;
+use YandexKassa\Events\PaymentCreated;
+use Event;
 
 class YandexPaymentRepository implements YandexPaymentRepositoryInterface
 {
@@ -31,7 +33,11 @@ class YandexPaymentRepository implements YandexPaymentRepositoryInterface
      */
     public function create(array $data)
     {
-        return $this->model->create($data);
+        $payment = $this->model->create($data);
+
+        Event::fire(new PaymentCreated($payment));
+
+        return ;
     }
 
     /**

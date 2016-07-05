@@ -6,7 +6,7 @@ namespace CawaKharkov\YandexKassa\Repositories;
 use CawaKharkov\YandexKassa\Interfaces\YandexPaymentInterface;
 use CawaKharkov\YandexKassa\Interfaces\YandexPaymentRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
-use YandexKassa\Events\PaymentCreated;
+use CawaKharkov\YandexKassa\Events\PaymentCreated;
 use Event;
 
 /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace YandexKassa\Events;
+namespace CawaKharkov\YandexKassa\Events;
 
 use App\Podcast;
 use App\Events\Event;

@@ -129,7 +129,7 @@ class PaymentController extends Controller
 
         }
 
-        $xml = $this->generateXml($code, $data['invoiceId'], $requestDatetime);
+        $xml = $this->generateXml($code, $data['invoiceId'], $requestDatetime,true);
 
         return Response::make($xml->asXML())->header('content', 'application/xml');
     }
@@ -140,9 +140,14 @@ class PaymentController extends Controller
      * @param $transactionId
      * @param $requestDatetime
      */
-    protected function generateXml($code, $transactionId, $requestDatetime)
+    protected function generateXml($code, $transactionId, $requestDatetime, $aviso = false)
     {
-        $xml = new \SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><checkOrderResponse/>');
+        $type = 'checkOrderResponse';
+        if($aviso){
+            $type = 'paymentAvisoRequest';
+        }
+
+        $xml = new \SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><'.$type.'/>');
 
         $xml->addAttribute('code', $code);
         $xml->addAttribute('invoiceId', $transactionId);

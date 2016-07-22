@@ -17,8 +17,8 @@ return [
         'laravel-balance::transactions.list',
     ],
 
-    'form_url' => 'https://demomoney.yandex.ru/eshop.xml',
     'shop' =>[
+        'form_url' => 'https://demomoney.yandex.ru/eshop.xml',
         'shopId' => '',  //Идентификатор магазина, выдается при подключении к Яндекс.Кассе.
         'scid' => '', //Идентификатор витрины магазина, выдается при подключении к Яндекс.Кассе.
         'password' => '', 

@@ -5,8 +5,10 @@
 ### Утановка
 
 - Подключить пакет с помощь композера: ``` composer require cawakharkov/yandex-kassa ```
+- Опубликовать всё файлы необходимые для работы пакета ``` php artisan vendor:publish ```
+  - Миграции
+  - Файл конфигурации(config/yandex_kassa.php)
 - 
-
 
 
 ### Настройки

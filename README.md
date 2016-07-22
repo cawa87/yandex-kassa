@@ -4,6 +4,8 @@
 
 ### Утановка
 
+- Подключить пакет с помощь композера: ``` composer require cawakharkov/yandex-kassa ```
+- 
 
 
 

@@ -19,5 +19,5 @@
       "CawaKharkov\\YandexKassa\\": "src/YandexKassa"
     }
   },
-  "minimum-stability": "dev"
+  "minimum-stability": "stable"
 }

@@ -3,7 +3,7 @@
 Route::group(['prefix' => config('yandex_kassa.prefix')], function () {
     Route::get('form', [
         'as' => 'yandex_kassa.form',
-        'middleware' => 'auth',
+        'middleware' => ['auth','web'],
         'uses' => '\CawaKharkov\YandexKassa\Controllers\PaymentController@form']);
 
     Route::post('check', [

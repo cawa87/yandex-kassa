@@ -4,12 +4,14 @@ namespace CawaKharkov\YandexKassa\Controllers;
 
 
 use App\Http\Controllers\Controller;
+use CawaKharkov\YandexKassa\Events\PaymentAccepted;
 use CawaKharkov\YandexKassa\Interfaces\YandexPaymentRepositoryInterface;
 use CawaKharkov\LaravelBalance\Models\BalanceTransaction;
 use CawaKharkov\YandexKassa\Requests\PaymentRequest;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
+use Event;
 
 
 /**
@@ -122,6 +124,8 @@ class PaymentController extends Controller
 
                     $payment->accepted = 1;
                     $payment->save();
+
+                    Event::fire(new PaymentAccepted($payment));
 
                 });
 

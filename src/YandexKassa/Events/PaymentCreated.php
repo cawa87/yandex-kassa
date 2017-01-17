@@ -3,7 +3,7 @@
 namespace CawaKharkov\YandexKassa\Events;
 
 use App\Podcast;
-use App\Events\Event;
+use Event;
 use CawaKharkov\YandexKassa\Interfaces\YandexPaymentInterface;
 use Illuminate\Queue\SerializesModels;
 

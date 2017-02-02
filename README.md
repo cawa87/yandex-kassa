@@ -1,6 +1,7 @@
 ## Пакет реализующий интеграцию приёма платежей с Яндекс.Касса
 ### Laravel package that provides integration with Yandex.Kassa([README.EN](https://github.com/CawaKharkov/yandex-kassa/blob/master/README.EN.md))
 
+## *В настоящее время работает только с Laravel> 5.3, для 5.2 будет создана отдельная ветка*
 
 ### Утановка
 

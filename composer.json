@@ -10,8 +10,8 @@
   ],
   "require": {
     "php": ">=5.6.0",
-    "laravel/framework": "~5.2",
-    "illuminate/support": "~5.2",
+    "laravel/framework": "~5.3",
+    "illuminate/support": "~5.3",
     "cawakharkov/laravel-balance": "dev-master"
   },
   "autoload": {

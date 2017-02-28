@@ -13,8 +13,7 @@ return [
      * Views to inject transaction repository 
      */
     'compose' => [
-        'laravel-balance::transactions.list',
-        'laravel-balance::transactions.list',
+        'laravel-balance::transactions.list'
     ],
 
     'shop' =>[

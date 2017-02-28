@@ -5,8 +5,9 @@
 
 ### Утановка
 
-- Подключить пакет с помощь композера: ``` composer require cawakharkov/yandex-kassa ```
-- Настроить пакет [cawaKharkov/laravel-balance](https://github.com/CawaKharkov/laravel-balance)
+- Подключить пакет с помощь композера: ``` composer require cawakharkov/yandex-kassa:dev-master ```
+- Если вы получили ошибку о том, что ваш проект не совместим с дев версией пакета, необходимо понизить требования minimum-stability - https://getcomposer.org/doc/04-schema.md#minimum-stability
+- Настроить пакет [CawaKharkov/laravel-balance](https://github.com/CawaKharkov/laravel-balance)
 - Подключить сервис провайдер `config/app.php` -> ``` \CawaKharkov\YandexKassa\YandexKassaServiceProvider::class, ```
 - Опубликовать всё файлы необходимые для работы пакета ``` php artisan vendor:publish ```
   - Миграции

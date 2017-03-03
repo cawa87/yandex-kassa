@@ -148,7 +148,7 @@ class PaymentController extends Controller
     {
         $type = 'checkOrderResponse';
         if($aviso){
-            $type = 'paymentAvisoRequest';
+            $type = 'paymentAvisoResponse';
         }
 
         $xml = new \SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><'.$type.'/>');
